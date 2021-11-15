@@ -1,0 +1,4 @@
+alpaca_trade_api==1.4.0
+numpy==1.20.3
+pandas==1.0.3
+yahoo_fin==0.8.9.1
