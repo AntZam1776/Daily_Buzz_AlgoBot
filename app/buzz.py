@@ -3,7 +3,7 @@ from utils import *
 # get alpaca asset list
 alpaca_assets_list = get_assets_from_alpaca()
 
-# get top gainers for the day from yahoo
+# get top gainers for the day from yahoo. Move this to Quandl.
 yahoo_gainers = get_top_gainers_from_yahoo()
 
 # merge both DF (join:inner) on symbol
