@@ -1,4 +1,6 @@
 alpaca_trade_api==1.4.0
 numpy==1.20.3
-pandas==1.0.3
+pandas==1.0.5
+pytrends==4.7.3
+Quandl==3.7.0
 yahoo_fin==0.8.9.1

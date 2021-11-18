@@ -1,8 +1,10 @@
 from yahoo_fin import stock_info as yf_info
-import constants
 from alpaca_trade_api.rest import REST
+from datetime import date
 import pandas as pd
 import numpy as np
+import quandl
+import constants
 import os
 
 def apply_additional_filters(a):
@@ -61,11 +63,24 @@ def get_top_gainers_from_yahoo():
     return df
 
 def get_buzz_scores(list_of_stocks):
-    length = len(list_of_stocks.index)
-    # Add dummy values to buzz
-    list_of_stocks['buzz'] = np.random.randint(1,length, size=length)
 
-    return list_of_stocks
+    # We poll sentiment score from Qunadl. Setup Key
+    quandl.ApiConfig.api_key = os.environ.get('QUANDL_KEY')
+
+    today = date.today()
+    d = today.strftime("%Y-%m-%d")
+
+    # Get today's sentiment for all stocks
+    df = quandl.get_table('NDAQ/RTAT', date=d)
+
+    # Rename ticker->symbol and sentiment->buzz
+    df.rename(columns={'ticker':'symbol', 'sentiment':'buzz'}, inplace=True)
+    df.set_index('symbol')
+
+    # find intersection with incoming list
+    df = list_of_stocks.merge(df, on='symbol')
+
+    return df
 
 def take_long_position(ticker, fraction):
     # create a REST API interface
