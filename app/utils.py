@@ -6,6 +6,7 @@ import numpy as np
 import quandl
 import constants
 import os
+import time
 
 def apply_additional_filters(a):
     '''Giant list from ALPCA has all symbols. 
@@ -24,6 +25,29 @@ def apply_additional_filters(a):
     print ("Trimmed list of stocks from {} to {} ".format(len(a.index), len(c.index)))
     return c
     ## @Anil: Perhaps we should also filter out low CAP stocks??
+
+def close_all_positions():
+    # create a REST API interface
+    api = REST(base_url='https://paper-api.alpaca.markets', secret_key=os.environ.get('APCA_API_SECRET_KEY'), key_id=os.environ.get('APCA_API_KEY_ID'))
+
+    # Cancel all open orders
+    api.cancel_all_orders()
+
+    # ALPACA is wierd. needs some time to cancel orders
+    time.sleep(5)
+
+    # Now fetch all positions
+    positions = api.list_positions()
+
+    # Loop through all positions and close them
+    closed = []
+    for p in positions:
+        side = 'sell'
+        closed.append(api.submit_order(p.symbol, qty=p.qty, side=side, type="market", time_in_force="day"))
+
+    # Print all submitted orders
+    if closed:
+        print("Submitted Orders", closed)
 
 def get_assets_from_alpaca():
     ''' Fetch all symbols from Alpaca '''
