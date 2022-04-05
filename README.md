@@ -1,4 +1,4 @@
-# daily_buzz
+# Daily Buzz Algo Trader Bot
 Group Project
 
 This is a algorythmic based trading strategy which seeks to use a 'buzzscore' to produce qualified stocks in the marketplace, invest in them, stage them for a stop-loss limit, and stage them for a increase sell-limit.
